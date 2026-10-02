@@ -131,7 +131,9 @@ http://127.0.0.1:5000
 
 ## 📸 Screenshots
 
-Screenshots of the application's main pages can be added here to demonstrate the user interface and functionality.
+### 🏠 Home Page
+
+![Smart Grid Home Page](homepage.png)
 
 ## 🎯 Project Objective
 
