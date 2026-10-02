@@ -139,6 +139,23 @@ http://127.0.0.1:5000
 
 ![Smart Grid Login Page](login-page.png)
 
+### ⚡ Prediction Page
+
+![Smart Grid Prediction Page](prediction-page.png)
+
+### 📊 Predicted Load Result
+
+![Predicted Load Result](predicted-load.png)
+
+### 📈 Energy Insights
+
+![Energy Insights](energy-insights-page.png)
+
+### 📂 Upload Dataset
+
+![Upload Dataset](upload-dataset.png)
+
+
 ## 🎯 Project Objective
 
 The objective of this project is to demonstrate how **Python, Flask, MySQL, data analysis, and machine learning** can be combined to build a web-based smart grid energy analysis and prediction application.
