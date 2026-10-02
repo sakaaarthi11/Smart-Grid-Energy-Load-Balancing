@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Grid Energy Load Balancing</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+
+            font-family: "Segoe UI", Arial, sans-serif;
+
+            /* GREEN ENERGY BACKGROUND IMAGE */
+            background-image: url("/static/images/greenenergyimg.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Bright natural background */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+
+            background: rgba(255, 255, 255, 0.08);
+
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Main glass panel */
+        .welcome-card {
+            position: relative;
+            z-index: 2;
+
+            width: 900px;
+            max-width: 88%;
+
+            min-height: 650px;
+
+            padding: 55px 70px 45px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+
+            /* Frosted glass */
+            background: rgba(235, 249, 248, 0.55);
+
+            border: 2px solid rgba(255, 255, 255, 0.72);
+
+            border-radius: 32px;
+
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+
+            box-shadow:
+                0 25px 70px rgba(0, 50, 45, 0.28),
+                inset 0 1px 1px rgba(255, 255, 255, 0.9);
+        }
+
+        /* Small eco icon */
+        .eco-icon {
+            width: 82px;
+            height: 82px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin-bottom: 18px;
+
+            font-size: 55px;
+
+            background: rgba(255, 255, 255, 0.40);
+
+            border-radius: 50%;
+
+            box-shadow:
+                0 8px 20px rgba(0, 70, 55, 0.12);
+        }
+
+        /* Main title */
+        h1 {
+            color: #07535b;
+
+            font-size: 48px;
+            font-weight: 750;
+
+            line-height: 1.12;
+
+            letter-spacing: -1px;
+
+            margin-bottom: 18px;
+
+            text-shadow:
+                0 2px 4px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Subtitle */
+        .subtitle {
+            color: #155e5d;
+
+            font-size: 21px;
+            font-weight: 500;
+
+            line-height: 1.5;
+
+            margin-bottom: 22px;
+        }
+
+        /* Green separator */
+        .separator {
+            width: 115px;
+            height: 5px;
+
+            background: #07976f;
+
+            border-radius: 20px;
+
+            margin-bottom: 27px;
+        }
+
+        /* Description */
+        .description {
+            max-width: 670px;
+
+            color: #245c5a;
+
+            font-size: 17px;
+            font-weight: 500;
+
+            line-height: 1.75;
+
+            margin-bottom: 38px;
+        }
+
+        /* Buttons container */
+        .buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            gap: 28px;
+
+            width: 100%;
+        }
+
+        /* Common button */
+        .btn {
+            width: 190px;
+
+            padding: 16px 30px;
+
+            border-radius: 35px;
+
+            text-decoration: none;
+
+            font-size: 18px;
+            font-weight: 600;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                background 0.25s ease;
+        }
+
+        /* Register button */
+        .register {
+            background: rgba(255, 255, 255, 0.95);
+
+            color: #07966f;
+
+            border: 2px solid #07966f;
+
+            box-shadow:
+                0 8px 22px rgba(0, 70, 55, 0.15);
+        }
+
+        /* Login button */
+        .login {
+            background: #079f82;
+
+            color: white;
+
+            border: 2px solid #079f82;
+
+            box-shadow:
+                0 8px 22px rgba(0, 70, 55, 0.20);
+        }
+
+        /* Hover */
+        .btn:hover {
+            transform: translateY(-5px);
+
+            box-shadow:
+                0 15px 30px rgba(0, 60, 50, 0.25);
+        }
+
+        .register:hover {
+            background: white;
+        }
+
+        .login:hover {
+            background: #078c73;
+        }
+
+        /* Footer */
+        .footer-text {
+            margin-top: 38px;
+
+            color: #25615e;
+
+            font-size: 14px;
+            font-weight: 500;
+
+            letter-spacing: 0.2px;
+        }
+
+        /* Mobile */
+        @media (max-width: 800px) {
+
+            .welcome-card {
+                width: 92%;
+                min-height: auto;
+
+                padding: 45px 25px;
+            }
+
+            h1 {
+                font-size: 35px;
+            }
+
+            .subtitle {
+                font-size: 18px;
+            }
+
+            .description {
+                font-size: 15px;
+            }
+
+            .buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .btn {
+                width: 210px;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            h1 {
+                font-size: 29px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+
+            .eco-icon {
+                width: 65px;
+                height: 65px;
+                font-size: 42px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="welcome-card">
+
+        <!-- Eco icon -->
+        <div class="eco-icon">
+            🌿⚡
+        </div>
+
+        <!-- Main heading -->
+        <h1>
+            Smart Grid Energy<br>
+            Load Balancing
+        </h1>
+
+        <!-- Subtitle -->
+        <div class="subtitle">
+            Machine Learning Based Energy Load Prediction
+            <br>
+            and Balancing
+        </div>
+
+        <!-- Green line -->
+        <div class="separator"></div>
+
+        <!-- Description -->
+        <p class="description">
+            Predict electricity demand using Machine Learning and
+            support smarter energy management through intelligent
+            load balancing and renewable energy utilization.
+        </p>
+
+        <!-- Real Flask buttons -->
+        <div class="buttons">
+
+            <a href="{{ url_for('register') }}" class="btn register">
+                Register
+            </a>
+
+            <a href="{{ url_for('login') }}" class="btn login">
+                Login
+            </a>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="footer-text">
+            Smart Energy
+            &nbsp;&nbsp;•&nbsp;&nbsp;
+            Renewable Power
+            &nbsp;&nbsp;•&nbsp;&nbsp;
+            Intelligent Grid Management
+        </div>
+
+    </div>
+
+</body>
+</html>

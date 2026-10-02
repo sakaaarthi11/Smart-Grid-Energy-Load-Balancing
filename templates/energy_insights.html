@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Energy Insights - Smart Grid System</title>
+
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+<style>
+
+/* ================= GENERAL ================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+
+    min-height: 100vh;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    background:
+        linear-gradient(
+            rgba(0, 35, 45, 0.48),
+            rgba(0, 20, 30, 0.60)
+        ),
+        url("/static/images/windimg.webp");
+
+    background-size: cover;
+
+    background-position: center;
+
+    background-repeat: no-repeat;
+
+    background-attachment: fixed;
+
+    color: white;
+}
+
+
+/* ================= NAVBAR ================= */
+
+.navbar {
+
+    width: 100%;
+
+    padding: 17px 40px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    background: rgba(0, 25, 35, 0.55);
+
+    backdrop-filter: blur(10px);
+
+    -webkit-backdrop-filter: blur(10px);
+
+    border-bottom: 1px solid rgba(255,255,255,0.25);
+}
+
+.navbar h2 {
+
+    margin: 0;
+
+    font-size: 24px;
+
+    color: #86efac;
+}
+
+.navbar a {
+
+    color: #f0fdf4;
+
+    text-decoration: none;
+
+    margin-left: 22px;
+
+    font-size: 14px;
+
+    font-weight: bold;
+}
+
+.navbar a:hover {
+
+    color: #86efac;
+}
+
+
+/* ================= MAIN ================= */
+
+.container {
+
+    width: 92%;
+
+    max-width: 950px;
+
+    margin: 35px auto 60px;
+}
+
+
+/* ================= MAIN CARD ================= */
+
+.card {
+
+    background: rgba(255,255,255,0.16);
+
+    border: 1px solid rgba(255,255,255,0.35);
+
+    backdrop-filter: blur(15px);
+
+    -webkit-backdrop-filter: blur(15px);
+
+    border-radius: 24px;
+
+    padding: 32px;
+
+    box-shadow:
+        0 25px 60px rgba(0,0,0,0.40),
+        inset 0 1px 0 rgba(255,255,255,0.20);
+}
+
+
+/* ================= TITLE ================= */
+
+h1 {
+
+    text-align: center;
+
+    font-size: 32px;
+
+    margin-bottom: 8px;
+
+    color: white;
+
+    text-shadow:
+        0 2px 8px rgba(0,0,0,0.6);
+}
+
+.page-description {
+
+    text-align: center;
+
+    color: #dcfce7;
+
+    font-size: 14px;
+
+    margin-bottom: 25px;
+}
+
+
+/* ================= UPLOAD BOX ================= */
+
+.upload-box {
+
+    margin-top: 20px;
+
+    padding: 28px;
+
+    background: rgba(255,255,255,0.13);
+
+    border: 1px solid rgba(255,255,255,0.30);
+
+    border-radius: 18px;
+
+    text-align: center;
+}
+
+.upload-box h3 {
+
+    font-size: 20px;
+
+    margin-bottom: 8px;
+
+    color: #86efac;
+}
+
+.upload-box p {
+
+    color: #ecfdf5;
+
+    font-size: 13px;
+
+    margin-bottom: 15px;
+}
+
+
+/* ================= FILE INPUT ================= */
+
+input[type="file"] {
+
+    width: 100%;
+
+    max-width: 500px;
+
+    margin: 15px auto;
+
+    padding: 12px;
+
+    background: rgba(255,255,255,0.94);
+
+    border-radius: 10px;
+
+    color: #17202a;
+
+    border: none;
+}
+
+
+/* ================= BUTTON ================= */
+
+button {
+
+    background:
+        linear-gradient(
+            135deg,
+            #16a34a,
+            #059669
+        );
+
+    color: white;
+
+    border: none;
+
+    padding: 13px 30px;
+
+    border-radius: 11px;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,0.30);
+
+    transition: 0.2s;
+}
+
+button:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 25px rgba(0,0,0,0.40);
+}
+
+
+/* ================= INSIGHT RESULT ================= */
+
+.insight-box {
+
+    margin-top: 28px;
+
+    padding: 23px;
+
+    background: rgba(0,40,30,0.58);
+
+    border: 1px solid rgba(134,239,172,0.35);
+
+    border-left: 5px solid #22c55e;
+
+    border-radius: 15px;
+}
+
+.insight-box h3 {
+
+    color: #86efac;
+
+    margin-bottom: 15px;
+
+    font-size: 20px;
+}
+
+.insight-box p {
+
+    margin: 9px 0;
+
+    color: #f0fdf4;
+
+    font-size: 15px;
+}
+
+
+/* ================= GRAPH ================= */
+
+#energyChart {
+
+    margin-top: 28px;
+
+    width: 100%;
+
+    min-height: 500px;
+
+    background: rgba(255,255,255,0.96);
+
+    border-radius: 18px;
+
+    padding: 8px;
+}
+
+
+/* ================= SUGGESTIONS ================= */
+
+.suggestions {
+
+    margin-top: 28px;
+
+    padding: 23px;
+
+    background: rgba(255,255,255,0.14);
+
+    border: 1px solid rgba(255,255,255,0.30);
+
+    border-radius: 15px;
+}
+
+.suggestions h3 {
+
+    color: #86efac;
+
+    margin-bottom: 15px;
+}
+
+.suggestions p {
+
+    margin: 10px 0;
+
+    color: #f0fdf4;
+
+    line-height: 1.5;
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width: 700px) {
+
+    .navbar {
+
+        padding: 15px 20px;
+
+        flex-direction: column;
+
+        gap: 12px;
+    }
+
+    .navbar a {
+
+        margin-left: 8px;
+
+        margin-right: 8px;
+    }
+
+    .container {
+
+        width: 94%;
+    }
+
+    .card {
+
+        padding: 22px;
+    }
+
+    h1 {
+
+        font-size: 27px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<div class="navbar">
+
+    <h2>
+        🌿 Smart Grid System
+    </h2>
+
+    <div>
+
+        <a href="/prediction">
+            ⚡ Load Balancer
+        </a>
+
+        <a href="/energy-insights">
+            📊 Energy Insights
+        </a>
+
+        <a href="/logout">
+            Logout
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- ================= MAIN ================= -->
+
+<div class="container">
+
+<div class="card">
+
+
+<h1>
+    📊 Energy Insights
+</h1>
+
+
+<div class="page-description">
+
+    Analyze energy consumption and temperature patterns
+
+</div>
+
+
+<!-- ================= UPLOAD ================= -->
+
+<div class="upload-box">
+
+<h3>
+    📁 Upload Energy Dataset
+</h3>
+
+
+<p>
+    Upload a CSV file containing Energy and Temperature data.
+</p>
+
+
+<form
+    method="POST"
+    action="/energy-insights"
+    enctype="multipart/form-data"
+>
+
+
+<input
+    type="file"
+    name="energy_file"
+    accept=".csv"
+    required
+>
+
+
+<br>
+
+
+<button type="submit">
+
+    🔍 Analyze Energy Data
+
+</button>
+
+
+</form>
+
+</div>
+
+
+{% if energy_result %}
+
+
+<!-- ================= RESULT ================= -->
+
+<div class="insight-box">
+
+<h3>
+    ⚡ Energy Analysis Result
+</h3>
+
+
+<p>
+
+<strong>
+Average Energy:
+</strong>
+
+{{ average_energy }}
+
+</p>
+
+
+<p>
+
+<strong>
+Average Temperature:
+</strong>
+
+{{ average_temperature }} °C
+
+</p>
+
+
+</div>
+
+
+<!-- ================= GRAPH ================= -->
+
+<div id="energyChart"></div>
+
+
+<!-- ================= DATA FOR JAVASCRIPT ================= -->
+
+<script type="application/json" id="energyData">
+{
+    "energy": {{ energy_values | tojson }},
+    "temperature": {{ temperature_values | tojson }}
+}
+</script>
+
+
+<!-- ================= GRAPH JAVASCRIPT ================= -->
+
+<script>
+
+const energyData = JSON.parse(
+    document.getElementById("energyData").textContent
+);
+
+const energyValues = energyData.energy;
+
+const temperatureValues = energyData.temperature;
+
+
+const recordNumbers = Array.from(
+    { length: energyValues.length },
+    (_, i) => i + 1
+);
+
+
+const chartData = [
+
+    {
+        x: recordNumbers,
+
+        y: energyValues,
+
+        type: "scatter",
+
+        mode: "lines+markers",
+
+        name: "Energy",
+
+        yaxis: "y1"
+    },
+
+    {
+        x: recordNumbers,
+
+        y: temperatureValues,
+
+        type: "scatter",
+
+        mode: "lines+markers",
+
+        name: "Temperature",
+
+        yaxis: "y2"
+    }
+
+];
+
+
+const chartLayout = {
+
+    title: {
+
+        text: "Energy and Temperature Analysis",
+
+        font: {
+            size: 20
+        }
+
+    },
+
+    xaxis: {
+
+        title: "Record Number"
+
+    },
+
+    yaxis: {
+
+        title: "Energy"
+
+    },
+
+    yaxis2: {
+
+        title: "Temperature (°C)",
+
+        overlaying: "y",
+
+        side: "right"
+
+    },
+
+    legend: {
+
+        orientation: "h",
+
+        y: 1.12
+
+    },
+
+    margin: {
+
+        l: 70,
+
+        r: 70,
+
+        t: 85,
+
+        b: 65
+
+    },
+
+    paper_bgcolor: "rgba(0,0,0,0)",
+
+    plot_bgcolor: "rgba(255,255,255,0.96)"
+
+};
+
+
+Plotly.newPlot(
+
+    "energyChart",
+
+    chartData,
+
+    chartLayout,
+
+    {
+
+        responsive: true,
+
+        displaylogo: false
+
+    }
+
+);
+
+</script>
+
+
+<!-- ================= SUGGESTIONS ================= -->
+
+<div class="suggestions">
+
+<h3>
+    🌱 Energy Saving Suggestions
+</h3>
+
+
+{% for suggestion in suggestions %}
+
+<p>
+    • {{ suggestion }}
+</p>
+
+{% endfor %}
+
+
+</div>
+
+
+{% endif %}
+
+
+</div>
+
+</div>
+
+
+</body>
+
+</html>

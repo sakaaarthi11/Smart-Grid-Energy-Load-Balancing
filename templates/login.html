@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Smart Grid System - User Login</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+
+    min-height: 100vh;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background:
+        linear-gradient(
+            rgba(0, 20, 30, 0.42),
+            rgba(0, 15, 25, 0.58)
+        ),
+        url("/static/images/windnytimg.webp");
+
+    background-size: cover;
+
+    background-position: center;
+
+    background-repeat: no-repeat;
+
+    background-attachment: fixed;
+
+}
+
+
+/* MAIN LOGIN AREA */
+
+.login-wrapper {
+
+    width: 100%;
+
+    max-width: 440px;
+
+    padding: 20px;
+
+}
+
+
+/* LOGIN CARD */
+
+.login-card {
+
+    background: rgba(255, 255, 255, 0.16);
+
+    border: 1px solid rgba(255, 255, 255, 0.35);
+
+    backdrop-filter: blur(16px);
+
+    -webkit-backdrop-filter: blur(16px);
+
+    border-radius: 24px;
+
+    padding: 38px 34px;
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+
+    color: white;
+
+}
+
+
+/* BRAND */
+
+.brand {
+
+    text-align: center;
+
+    margin-bottom: 10px;
+
+}
+
+.brand h1 {
+
+    font-size: 28px;
+
+    color: #86efac;
+
+    margin-bottom: 6px;
+
+}
+
+.brand p {
+
+    font-size: 13px;
+
+    color: #ecfdf5;
+
+}
+
+
+/* TITLE */
+
+.login-title {
+
+    text-align: center;
+
+    margin: 25px 0;
+
+}
+
+.login-title h2 {
+
+    font-size: 25px;
+
+    margin-bottom: 8px;
+
+}
+
+.login-title p {
+
+    font-size: 13px;
+
+    color: #dcfce7;
+
+}
+
+
+/* FORM */
+
+.field {
+
+    margin-bottom: 18px;
+
+}
+
+.field label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    color: #f0fdf4;
+
+}
+
+.field input {
+
+    width: 100%;
+
+    padding: 14px;
+
+    border: 1px solid rgba(255,255,255,0.45);
+
+    border-radius: 11px;
+
+    outline: none;
+
+    font-size: 15px;
+
+    background: rgba(255,255,255,0.94);
+
+    color: #17202a;
+
+}
+
+.field input:focus {
+
+    border-color: #86efac;
+
+    box-shadow:
+        0 0 0 3px rgba(134,239,172,0.25);
+
+}
+
+
+/* LOGIN BUTTON */
+
+.login-btn {
+
+    width: 100%;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #16a34a,
+            #059669
+        );
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    margin-top: 5px;
+
+    box-shadow:
+        0 8px 22px rgba(0,0,0,0.30);
+
+    transition: 0.2s;
+
+}
+
+.login-btn:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 28px rgba(0,0,0,0.40);
+
+}
+
+
+/* LINKS */
+
+.links {
+
+    text-align: center;
+
+    margin-top: 20px;
+
+}
+
+.links a {
+
+    color: #dcfce7;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+}
+
+.links a:hover {
+
+    color: white;
+
+    text-decoration: underline;
+
+}
+
+
+/* PROJECT INFORMATION */
+
+.project-info {
+
+    text-align: center;
+
+    margin-top: 25px;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+
+    color: #e2fbe9;
+
+}
+
+
+/* MOBILE */
+
+@media(max-width: 500px) {
+
+    .login-wrapper {
+
+        padding: 15px;
+
+    }
+
+    .login-card {
+
+        padding: 30px 22px;
+
+    }
+
+    .brand h1 {
+
+        font-size: 24px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="login-wrapper">
+
+
+<div class="login-card">
+
+
+<div class="brand">
+
+<h1>🌿 Smart Grid System</h1>
+
+<p>Clean Energy • Smarter Future</p>
+
+</div>
+
+
+<div class="login-title">
+
+<h2>🔐 User Login</h2>
+
+<p>
+
+Access your Smart Grid Energy Dashboard
+
+</p>
+
+</div>
+
+
+<form method="POST" action="/login">
+
+
+<div class="field">
+
+<label for="email">
+
+Email Address
+
+</label>
+
+<input
+type="email"
+id="email"
+name="email"
+placeholder="Enter your email"
+required>
+
+</div>
+
+
+<div class="field">
+
+<label for="password">
+
+Password
+
+</label>
+
+<input
+type="password"
+id="password"
+name="password"
+placeholder="Enter your password"
+required>
+
+</div>
+
+
+<button
+type="submit"
+class="login-btn">
+
+🚀 Login
+
+</button>
+
+
+</form>
+
+
+<div class="links">
+
+<a href="/register">
+
+Don't have an account? Register
+
+</a>
+
+</div>
+
+
+<div class="project-info">
+
+Smart Grid Energy Load Balancing System<br>
+
+using Machine Learning
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</body>
+
+</html>

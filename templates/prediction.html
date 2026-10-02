@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Smart Grid Energy Load Balancing</title>
+
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+<style>
+
+/* ================= GENERAL ================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    min-height: 100vh;
+
+    background:
+        linear-gradient(
+            rgba(0, 35, 45, 0.45),
+            rgba(0, 20, 30, 0.55)
+        ),
+        url("/static/images/windimg.webp");
+
+    background-size: cover;
+
+    background-position: center;
+
+    background-attachment: fixed;
+
+    color: white;
+}
+
+
+/* ================= NAVBAR ================= */
+
+.navbar {
+
+    width: 100%;
+
+    padding: 18px 45px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    background: rgba(0, 25, 35, 0.55);
+
+    backdrop-filter: blur(8px);
+
+    -webkit-backdrop-filter: blur(8px);
+
+    border-bottom: 1px solid rgba(255,255,255,0.25);
+}
+
+.brand {
+
+    font-size: 25px;
+
+    font-weight: bold;
+}
+
+.brand span {
+
+    color: #86efac;
+}
+
+.tagline {
+
+    font-size: 14px;
+
+    color: #f0fdf4;
+}
+
+
+/* ================= MAIN ================= */
+
+.container {
+
+    width: 92%;
+
+    max-width: 1050px;
+
+    margin: 35px auto 60px;
+}
+
+.page-title {
+
+    text-align: center;
+
+    margin-bottom: 25px;
+
+    text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+}
+
+.page-title h1 {
+
+    font-size: 34px;
+
+    margin-bottom: 8px;
+}
+
+.page-title p {
+
+    font-size: 15px;
+
+    color: #ecfdf5;
+}
+
+
+/* ================= CARD ================= */
+
+.form-card {
+
+    background: rgba(255,255,255,0.16);
+
+    border: 1px solid rgba(255,255,255,0.35);
+
+    backdrop-filter: blur(14px);
+
+    -webkit-backdrop-filter: blur(14px);
+
+    border-radius: 22px;
+
+    padding: 32px;
+
+    box-shadow:
+        0 25px 60px rgba(0,0,0,0.40),
+        inset 0 1px 0 rgba(255,255,255,0.20);
+}
+
+.form-title {
+
+    text-align: center;
+
+    margin-bottom: 25px;
+}
+
+.form-title h2 {
+
+    font-size: 23px;
+
+    margin-bottom: 6px;
+}
+
+.form-title p {
+
+    font-size: 13px;
+
+    color: #dcfce7;
+}
+
+
+/* ================= INPUT GRID ================= */
+
+.input-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 18px;
+}
+
+.field {
+
+    display: flex;
+
+    flex-direction: column;
+}
+
+.field label {
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    margin-bottom: 7px;
+
+    color: #f0fdf4;
+}
+
+.field input {
+
+    width: 100%;
+
+    padding: 13px 14px;
+
+    border: 1px solid rgba(255,255,255,0.45);
+
+    border-radius: 10px;
+
+    background: rgba(255,255,255,0.94);
+
+    color: #123;
+
+    font-size: 15px;
+
+    outline: none;
+}
+
+.field input:focus {
+
+    border-color: #86efac;
+
+    box-shadow:
+        0 0 0 3px rgba(134,239,172,0.25);
+}
+
+
+/* ================= BUTTON ================= */
+
+.button-area {
+
+    text-align: center;
+
+    margin-top: 28px;
+}
+
+.predict-btn {
+
+    border: none;
+
+    padding: 14px 42px;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #16a34a,
+            #059669
+        );
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,0.30);
+
+    transition: 0.2s;
+}
+
+.predict-btn:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 25px rgba(0,0,0,0.40);
+}
+
+
+/* ================= RESULT ================= */
+
+.result-section {
+
+    margin-top: 30px;
+}
+
+.result-title {
+
+    text-align: center;
+
+    font-size: 25px;
+
+    margin-bottom: 20px;
+}
+
+
+/* ================= RESULT CARDS ================= */
+
+.result-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 18px;
+}
+
+.result-card {
+
+    background: rgba(255,255,255,0.18);
+
+    border: 1px solid rgba(255,255,255,0.3);
+
+    border-radius: 16px;
+
+    padding: 20px;
+
+    text-align: center;
+
+    backdrop-filter: blur(10px);
+
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.result-card h3 {
+
+    font-size: 14px;
+
+    margin-bottom: 10px;
+
+    color: #dcfce7;
+}
+
+.result-card .value {
+
+    font-size: 27px;
+
+    font-weight: bold;
+}
+
+
+/* ================= GRAPH ================= */
+
+.graph-card {
+
+    margin-top: 25px;
+
+    background: rgba(255,255,255,0.94);
+
+    border-radius: 18px;
+
+    padding: 15px;
+}
+
+#loadGraph {
+
+    width: 100%;
+
+    min-height: 400px;
+}
+
+
+/* ================= RECOMMENDATION ================= */
+
+.recommendation {
+
+    margin-top: 25px;
+
+    padding: 22px;
+
+    border-radius: 16px;
+
+    background: rgba(0,40,30,0.65);
+
+    border: 1px solid rgba(134,239,172,0.45);
+
+    text-align: center;
+}
+
+.recommendation h2 {
+
+    margin-bottom: 10px;
+
+    color: #86efac;
+}
+
+.recommendation p {
+
+    font-size: 17px;
+}
+
+
+/* ================= LINKS ================= */
+
+.page-link {
+
+    text-align: center;
+
+    margin-top: 20px;
+}
+
+.page-link a {
+
+    color: #dcfce7;
+
+    font-weight: bold;
+
+    text-decoration: none;
+}
+
+.page-link a:hover {
+
+    color: #86efac;
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width: 850px) {
+
+    .input-grid {
+
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .result-grid {
+
+        grid-template-columns: 1fr 1fr;
+    }
+
+}
+
+
+@media(max-width: 550px) {
+
+    .navbar {
+
+        padding: 16px 20px;
+    }
+
+    .tagline {
+
+        display: none;
+    }
+
+    .input-grid,
+    .result-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+    .form-card {
+
+        padding: 22px;
+    }
+
+    .page-title h1 {
+
+        font-size: 27px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<div class="navbar">
+
+    <div class="brand">
+
+        🌿 <span>Smart Grid System</span>
+
+    </div>
+
+    <div class="tagline">
+
+        Clean Energy • Smarter Future
+
+    </div>
+
+</div>
+
+
+<!-- ================= MAIN ================= -->
+
+<div class="container">
+
+
+<div class="page-title">
+
+    <h1>
+        Smart Grid Energy Load Balancing
+    </h1>
+
+    <p>
+        Machine Learning Based Energy Prediction & Renewable Power Management
+    </p>
+
+</div>
+
+
+<div class="form-card">
+
+
+<!-- ================= FORM TITLE ================= -->
+
+<div class="form-title">
+
+    <h2>
+        ⚡ Load Balancer Input
+    </h2>
+
+    <p>
+        Enter the energy and renewable power parameters
+    </p>
+
+</div>
+
+
+<!-- ================= PREDICTION FORM ================= -->
+
+<form method="POST" action="/prediction">
+
+
+<div class="input-grid">
+
+
+<!-- Voltage -->
+
+<div class="field">
+
+<label>
+    Voltage (V)
+</label>
+
+<input
+    type="number"
+    step="any"
+    name="voltage"
+    value="{{ voltage }}"
+    placeholder="Example: 230"
+    required>
+
+</div>
+
+
+<!-- Current -->
+
+<div class="field">
+
+<label>
+    Current (A)
+</label>
+
+<input
+    type="number"
+    step="any"
+    name="current"
+    value="{{ current }}"
+    placeholder="Example: 5"
+    required>
+
+</div>
+
+
+<!-- Reactive Power -->
+
+<div class="field">
+
+<label>
+    Reactive Power (kVAR)
+</label>
+
+<input
+    type="number"
+    step="any"
+    name="reactive_power"
+    value="{{ reactive_power }}"
+    placeholder="Example: 1.5"
+    required>
+
+</div>
+
+
+<!-- Power Factor -->
+
+<div class="field">
+
+<label>
+    Power Factor
+</label>
+
+<input
+    type="number"
+    step="any"
+    min="0"
+    max="1"
+    name="power_factor"
+    value="{{ power_factor }}"
+    placeholder="Example: 0.9"
+    required>
+
+</div>
+
+
+<!-- Solar Power -->
+
+<div class="field">
+
+<label>
+    Solar Power (kW)
+</label>
+
+<input
+    type="number"
+    step="any"
+    name="solar_power"
+    value="{{ solar_power }}"
+    placeholder="Example: 500"
+    required>
+
+</div>
+
+
+<!-- Wind Power -->
+
+<div class="field">
+
+<label>
+    Wind Power (kW)
+</label>
+
+<input
+    type="number"
+    step="any"
+    name="wind_power"
+    value="{{ wind_power }}"
+    placeholder="Example: 1000"
+    required>
+
+</div>
+
+
+<!-- Wind Radius -->
+
+<div class="field">
+
+<label>
+    Wind Turbine Radius (m)
+</label>
+
+<input
+    type="number"
+    step="any"
+    name="wind_radius"
+    value="{{ wind_radius }}"
+    placeholder="Example: 2"
+    required>
+
+</div>
+
+
+<!-- Latitude -->
+
+<div class="field">
+
+<label>
+    Latitude
+</label>
+
+<input
+    type="number"
+    step="any"
+    name="latitude"
+    value="{{ latitude }}"
+    placeholder="Example: 17.385"
+    required>
+
+</div>
+
+
+<!-- Longitude -->
+
+<div class="field">
+
+<label>
+    Longitude
+</label>
+
+<input
+    type="number"
+    step="any"
+    name="longitude"
+    value="{{ longitude }}"
+    placeholder="Example: 78.4867"
+    required>
+
+</div>
+
+
+</div>
+
+
+<!-- ================= BUTTON ================= -->
+
+<div class="button-area">
+
+<button
+    type="submit"
+    class="predict-btn">
+
+    ⚡ Predict Load
+
+</button>
+
+</div>
+
+
+</form>
+
+
+{% if result is not none %}
+
+
+<!-- ================= RESULT ================= -->
+
+<div class="result-section">
+
+
+<h2 class="result-title">
+
+    📊 Prediction Result
+
+</h2>
+
+
+<!-- ================= RESULT CARDS ================= -->
+
+<div class="result-grid">
+
+
+<div class="result-card">
+
+<h3>
+    Current Load
+</h3>
+
+<div class="value">
+
+    {{ current_load }} kW
+
+</div>
+
+</div>
+
+
+<div class="result-card">
+
+<h3>
+    Predicted Load
+</h3>
+
+<div class="value">
+
+    {{ result }} kW
+
+</div>
+
+</div>
+
+
+<div class="result-card">
+
+<h3>
+    Renewable Power
+</h3>
+
+<div class="value">
+
+    {{ renewable_power }} kW
+
+</div>
+
+</div>
+
+
+</div>
+
+
+<!-- ================= GRAPH ================= -->
+
+<div class="graph-card">
+
+    <div id="loadGraph"></div>
+
+</div>
+
+
+<!-- ================= RECOMMENDATION ================= -->
+
+<div class="recommendation">
+
+<h2>
+    ⚡ Load Balancing Recommendation
+</h2>
+
+<p>
+
+    {{ balance_status }}
+
+</p>
+
+<p style="margin-top:10px;">
+
+    Load Difference:
+
+    <strong>
+        {{ load_difference }} kW
+    </strong>
+
+</p>
+
+</div>
+
+
+</div>
+
+
+<!-- ================= GRAPH DATA ================= -->
+
+<script type="application/json" id="predictionData">
+{
+    "currentLoad": {{ current_load | tojson }},
+    "predictedLoad": {{ result | tojson }}
+}
+</script>
+
+
+<!-- ================= GRAPH JAVASCRIPT ================= -->
+
+<script>
+
+const predictionData = JSON.parse(
+    document.getElementById("predictionData").textContent
+);
+
+const currentLoad = predictionData.currentLoad;
+
+const predictedLoad = predictionData.predictedLoad;
+
+
+const data = [
+
+    {
+
+        x: [
+            "Current Load",
+            "Predicted Load"
+        ],
+
+        y: [
+            currentLoad,
+            predictedLoad
+        ],
+
+        type: "bar",
+
+        text: [
+
+            currentLoad + " kW",
+
+            predictedLoad + " kW"
+
+        ],
+
+        textposition: "auto"
+
+    }
+
+];
+
+
+const layout = {
+
+    title: {
+        text: "Current Load vs Predicted Load"
+    },
+
+    xaxis: {
+
+        title: "Load Type"
+
+    },
+
+    yaxis: {
+
+        title: "Load (kW)"
+
+    },
+
+    margin: {
+
+        t: 60,
+
+        l: 60,
+
+        r: 30,
+
+        b: 60
+
+    }
+
+};
+
+
+Plotly.newPlot(
+
+    "loadGraph",
+
+    data,
+
+    layout,
+
+    {
+
+        responsive: true,
+
+        displaylogo: false
+
+    }
+
+);
+
+</script>
+
+
+{% endif %}
+
+
+<!-- ================= ENERGY INSIGHTS LINK ================= -->
+
+<div class="page-link">
+
+<a href="/energy-insights">
+
+    📈 Energy Insights
+
+</a>
+
+</div>
+
+
+<!-- ================= LOGOUT ================= -->
+
+<div class="page-link" style="margin-top:12px;">
+
+<a href="/logout">
+
+    Logout
+
+</a>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</body>
+
+</html>
